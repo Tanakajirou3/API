@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>地理クイズアプリ</title>
+  <script src="https://www.bing.com/api/maps/mapcontrol?key=API_KEY"></script>
+  <style>
+    #map {
+      width: 500px;
+      height: 400px;
+    }
+css
+Copy code
+#quiz-hint {
+  font-weight: bold;
+  margin-top: 10px;
+}
+  </style>
+</head>
+<body>
+  <h1>地理クイズ</h1>
+  <div id="map"></div>
+  <div id="quiz-hint"></div>
+  <script>
+    var map;
+    var quizLocations = [
+      { latitude: 43.0686, longitude: 141.3508, hint: "この場所は北海道の中心にある主要な駅です。" },
+      { latitude: 35.6706, longitude: 139.7036, hint: "この場所は東京都渋谷区にある若者文化の中心地です。" }
+    ];
+    var currentQuizIndex = 0;
+
+    function initMap() {
+      map = new Microsoft.Maps.Map('#map', {
+        credentials: 'API_KEY',
+        center: new Microsoft.Maps.Location(quizLocations[currentQuizIndex].latitude, quizLocations[currentQuizIndex].longitude),
+        zoom: 15
+      });
+
+      showQuizHint();
+      setQuizLocation(quizLocations[currentQuizIndex].latitude, quizLocations[currentQuizIndex].longitude);
+
+      function setQuizLocation() {
+  var randomIndex = Math.floor(Math.random() * quizLocations.length);
+  var location = new Microsoft.Maps.Location(quizLocations[randomIndex].latitude, quizLocations[randomIndex].longitude);
+  var pushpin = new Microsoft.Maps.Pushpin(location);
+  pushpin.metadata = { isAnswer: true };
+  Microsoft.Maps.Events.addHandler(pushpin, 'click', handlePinClick);
+  map.entities.clear();
+  map.entities.push(pushpin);
+  map.setView({ center: location, zoom: 15 });
+}
+
+function nextQuiz() {
+  currentQuizIndex++;
+  if (currentQuizIndex < quizLocations.length) {
+    setQuizLocation();
+    showQuizHint();
+    setTimeout(nextQuiz, 30000);
+  } else {
+    alert("クイズが終了しました。");
+  }
+}
+
+      function showQuizHint() {
+        var hintElement = document.getElementById("quiz-hint");
+        hintElement.innerHTML = "ヒント: " + quizLocations[currentQuizIndex].hint;
+      }
+
+      function handlePinClick(e) {
+        var isAnswer = e.target.metadata.isAnswer;
+        if (isAnswer) {
+          alert("正解！");
+        } else {
+          alert("違うよ！");
+        }
+      }
+
+      function nextQuiz() {
+  currentQuizIndex++;
+  if (currentQuizIndex < quizLocations.length) {
+    setQuizLocation();
+    showQuizHint();
+    setTimeout(nextQuiz, 30000);
+  } else {
+    alert("クイズが終了しました。");
+  }
+}
+
+      setTimeout(nextQuiz, 30000);
+    }
+
+    function loadScript() {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'API_KEY';
+      document.body.appendChild(script);
+    }
+
+    window.onload = loadScript;
+  </script>
+</body>
+</html>
+
+
+
