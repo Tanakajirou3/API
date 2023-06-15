@@ -2,7 +2,7 @@
 地図クイズアプリ
 
 ## DEMO
-http://127.0.0.1:5500/map/sample_map/js/Untitled-1.html
+http://127.0.0.1:5500/map/sample_map/js/Untitled-1.html(API_KEYの3か所を書き換える必要があります)
 
 ## 紹介と使い方
 
